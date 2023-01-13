@@ -1,5 +1,5 @@
 namespace gamecrew.Models;
-
+#nullable enable
 public class ErrorViewModel
 {
     public string? RequestId { get; set; }
