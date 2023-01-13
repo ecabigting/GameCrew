@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using gamecrew.Models;
+using Microsoft.Extensions.Logging;
 
 namespace gamecrew.Controllers;
 
