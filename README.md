@@ -1,5 +1,6 @@
-<img src="./assets/GameCrew-withtext.png">
-
+<center>
+<img src="./assets/GameCrew-withtext.png" width="500">
+</center>
 # GameCrew - Development
 
 ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
