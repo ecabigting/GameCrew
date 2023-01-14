@@ -54,4 +54,4 @@ jobs:
           app-name: 'gamecrew'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_48D98DCDB7F34891BA6AD33E4E6E48FD }}
-          package: .
+          package: ${{env.DOTNET_ROOT}}/myapp
