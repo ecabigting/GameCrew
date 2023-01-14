@@ -20,9 +20,9 @@
                 <table class="table table-striped table-bordered" id="tblYourGroupsAsAdmin">
                     <thead>
                         <tr>
-                            <td class="text-center"></td>
-                            <td>Name</td>
-                            <td>Action</td>
+                            <th class="text-center"></th>
+                            <th>Name</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,11 +54,7 @@
                         }
                         else
                         {
-                            <tr>
-                                <td colspan="3">
-                                    <a asp-controller="Groups" asp-action="Create" class="btn btn-primary">Create a group</a>
-                                </td>
-                            </tr>
+                            
                         }
                     </tbody>
                 </table>
@@ -71,7 +67,7 @@
             </div>
             <div class="card-body">
                 <label class="text-info">@TempData["Message"]</label>
-                <table class="table table-striped table-bordered" id="tblYourGroupsAsAdmin">
+                <table class="table table-striped table-bordered" id="tblYourInvites">
                     <thead>
                         <tr>
                             <td class="text-center"></td>
@@ -114,11 +110,7 @@
                         }
                         else
                         {
-                            <tr>
-                                <td colspan="4">
-                                    <p>No pending invites!</p>
-                                </td>
-                            </tr>
+                           
                         }
                     </tbody>
                 </table>
@@ -132,7 +124,7 @@
             </div>
             <div class="card-body">
                 <label class="text-info ">@TempData["GroupAsAMember"]</label>
-                <table class="table table-striped table-bordered" id="tblYourGroupsAsAdmin">
+                <table class="table table-striped table-bordered" id="tblGroupsYouAreAMember">
                     <thead>
                         <tr>
                             <td class="text-center"></td>
@@ -173,11 +165,7 @@
                         }
                         else
                         {
-                            <tr>
-                                <td colspan="4">
-                                    <a asp-controller="Groups" asp-action="Find" class="btn btn-primary">Find a group</a>
-                                </td>
-                            </tr>
+                            
                         }
                     </tbody>
                 </table>
@@ -204,6 +192,8 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#tblYourGroupsAsAdmin").dataTable();
+            $("#tblYourInvites").dataTable();
+            $("#tblGroupsYouAreAMember").dataTable();
         });
     </script>
 }
