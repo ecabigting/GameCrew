@@ -12,4 +12,5 @@
 ![Microsoft Azure](https://img.shields.io/badge/microsoft%20azure-0089D6?style=for-the-badge&logo=microsoft-azure&logoColor=white)
 
 Social Media app to create and find your crew for the games you love to play
+You try a demo version [here](https://gamecrew.azurewebsites.net/)
 
