@@ -1,4 +1,33 @@
-﻿@{
-    ViewData["Title"] = "Game Crew";
-}
+﻿@using gamecrew.Models
+@model PlayerLogin
+@{
+    ViewData["Title"] = "Login";
 
+}
+<div class="container-fluid">
+    <h1 class="display-4 text-center">Welcome</h1>
+    <div class="card">
+        <div class="card-header bg-primary display-5 text-light fs-10">
+            Login
+        </div>
+        <div class="card-body">
+            <label class="text-info ">@TempData["Message"]</label>
+            <form method="post" asp-controller="Home" asp-action="Login">
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input type="email" class="form-control" asp-for="Email" placeholder="name@example.com">
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label">Password</label>
+                    <input type="password" class="form-control" asp-for="Password" placeholder="password">
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="form-control btn btn-secondary">Login</button>
+                </div>
+                <div class="mb-3">
+                    <a asp-controller="Home" asp-action="Register" class="form-control btn btn-secondary">Register</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

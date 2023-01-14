@@ -1,0 +1,53 @@
+﻿@using gamecrew.Models
+@model PlayerGroups
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container-fluid">
+    <h2 class="display-4 text-center">Groups</h2>
+    <div class="card">
+        <div class="card-header bg-primary display-5 text-light fs-10">
+            Create Group
+        </div>
+        <div class="card-body">
+            <form method="post" asp-controller="Groups" asp-action="Create">
+                <div class="mx-auto">
+                    <img src="~/img/placeholder_groups.png"
+                         id="ImagePrev"
+                         class="rounded-circle mx-auto d-block"
+                         alt="UploadImage"
+                         style="width:200px;height:200px;object-fit:cover;" />
+                    <div style="margin:auto; display:block; width:200px; text-align:center; padding-top:10px">
+                        <label class="btn btn-primary mx-auto form-label">
+                            Upload Group Image<input type="file" style="display: none;" name="ImageToUpload" id="ImageToUpload" onchange="encodeImgtoBase64(this)">
+                        </label><br />
+                        <p><small>Resolution: 200 x 200 <br />Max Size: 100kB</small></p>
+                    </div>
+                    <input type="text" style="display:none;" asp-for="Image" />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label">Name</label>
+                    <input type="text" class="form-control" asp-for="Name" placeholder="Name">
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label">Name</label>
+                    <textarea rows="3" class="form-control" asp-for="Description" placeholder="Desription"></textarea>
+                    <span asp-validation-for="Description" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="form-control btn btn-secondary">Create</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+    </script>
+}

@@ -1,0 +1,74 @@
+﻿@using gamecrew.Models
+@using gamecrew.Helpers
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor _httpCtxtAc;
+@{
+    ViewData["Title"] = "Dashboard";
+    ISession session = _httpCtxtAc.HttpContext.Session;
+    var PContext = session.GetObjectFromJson<PlayerContext>("playerContext");
+}
+@model List<Player>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header bg-primary text-light">
+            <span>Players</span>
+        </div>
+        <div class="card-body">
+            <label>@TempData["Message"]</label>
+            <table class="table table-striped table-bordered" id="tblPlayerList">
+                <thead>
+                    <tr>
+                        <td class="text-center"></td>
+                        <td>Name</td>
+                        <td>Action</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        @foreach (Player plyr in Model)
+                        {
+                            string grpImg = Url.Content("/img/placeholder.png");
+                            if (plyr.Image != null)
+                            {
+                                grpImg = plyr.Image;
+                            }
+                            <tr>
+                                <td class="text-center">
+                                    <img src="@grpImg"
+                                         id="AsAdminGroupImage"
+                                         class="img-thumbnail"
+                                         alt="UploadImage"
+                                         style="width:100px;height:100px;object-fit:cover;" />
+                                </td>
+                                <td>
+                                    <a asp-controller="Player" asp-action="Index" asp-route-playerId="@plyr.Id"> @plyr.Name</a>
+                                </td>
+                                <td>
+                                    <a asp-controller="Groups" asp-action="InvitePlayerToGroup" 
+                                       class="btn btn-primary"
+                                       asp-route-groupId="@ViewBag.GroupId" asp-route-playerId="@plyr.Id">Invite</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3">
+                                No Available Players
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#tblPlayerList").dataTable();
+        });
+    </script>
+}

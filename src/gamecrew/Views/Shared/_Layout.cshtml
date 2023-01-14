@@ -1,30 +1,65 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@using gamecrew.Helpers
+@inject IHttpContextAccessor _httpCtxtAc;
+
+@{
+    ISession session = _httpCtxtAc.HttpContext.Session;
+    var PlayerCtxt = session.GetObjectFromJson<PlayerContext>("playerContext");
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - gamecrew</title>
+    <title>@ViewData["Title"] - GameCrew</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/gamecrew.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/DataTables/datatables.min.css" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">gamecrew</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/img/Logo.png" style="width: 130px;"/>
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse ">
+                    <ul class="navbar-nav flex-grow-2 float-right">
+                        @if (PlayerCtxt != null && PlayerCtxt.Profile.Name != "")
+                        {
+                            string plyrImg = Url.Content("/img/placeholder.png");
+                            if (PlayerCtxt.Profile.Image != null)
+                            {
+                                plyrImg = PlayerCtxt.Profile.Image;
+                            }
+                            <li class="nav-item">
+                                <a class="nav-link text-dark font-weight-bold" asp-controller="Player" asp-action="Index" asp-route-playerId="@PlayerCtxt.Profile.Id">
+                                    <u>@PlayerCtxt.Profile.Name!</u>
+                                    <img src="@plyrImg"
+                                         id="MainProfilePic"
+                                         class="rounded-circle"
+                                         alt="Profile Picture"
+                                         style="width:31px;height:31px;object-fit:cover;" />
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Logout">Logout</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Register">Register</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -32,18 +67,21 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            @RenderBody()
+            <div class="container">
+                @RenderBody()
+            </div>
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - gamecrew - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy;  - GameCrew
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="~/lib/DataTables/datatables.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

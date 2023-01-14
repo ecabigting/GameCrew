@@ -1,0 +1,98 @@
+﻿@using gamecrew.Models
+@using gamecrew.Helpers
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor _httpCtxtAc;
+@{
+    ViewData["Title"] = "Dashboard";
+    ISession session = _httpCtxtAc.HttpContext.Session;
+    var PContext = session.GetObjectFromJson<PlayerContext>("playerContext");
+}
+@model List<PlayerGroupViewModel>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header bg-primary text-light">
+            <span>Find a group</span>
+            <a asp-controller="Groups" asp-action="Create" class="btn btn-secondary float-right">Create a group</a>
+        </div>
+        <div class="card-body">
+            <label>@TempData["Message"]</label>
+            <table class="table table-striped table-bordered" id="tblYourGroupsAsAdmin">
+                <thead>
+                    <tr>
+                        <td class="text-center"></td>
+                        <td>Name</td>
+                        <td>Administrator</td>
+                        <td>Action</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        @foreach (PlayerGroupViewModel groups in Model)
+                        {
+                            string grpImg = Url.Content("/img/placeholder.png");
+                            if (groups.Image != null)
+                            {
+                                grpImg = groups.Image;
+                            }
+                            <tr>
+                                <td class="text-center">
+                                    <img src="@grpImg"
+                                         id="AsAdminGroupImage"
+                                         class="img-thumbnail"
+                                         alt="UploadImage"
+                                         style="width:100px;height:100px;object-fit:cover;" />
+                                </td>
+                                <td>
+                                    <a asp-controller="Groups" asp-action="GroupView" asp-route-groupId="@groups.GroupId"> @groups.Name</a>
+                                </td>
+                                <td>
+                                    @groups.AdminName
+                                </td>
+                                <td>
+                                    @if (groups.AdminID == PContext.Profile.Id)
+                                    {
+                                        <p>You are the admin of this group!</p>
+                                    }
+                                    else
+                                    {
+                                        if (groups.IsMember == true)
+                                        {
+                                            <p>You are a member of this group!</p>
+                                        }
+                                        else
+                                        {
+                                            if (groups.IsPendingRequest == true)
+                                            {
+                                                <p>You have a pending request to join this group!</p>
+                                            }
+                                            else
+                                            {
+                                                <a asp-controller="Groups" asp-action="RequestJoinGroup" asp-route-groupId="@groups.GroupId" class="btn btn-secondary">Request to join</a>
+                                            }
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3">
+                                No Available Group
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#tblYourGroupsAsAdmin").dataTable();
+        });
+    </script>
+}

@@ -1,0 +1,52 @@
+@using gamecrew.Models
+@model Player
+@{
+    ViewData["Title"] = Model.Name;
+    string plyrImg = Url.Content("/img/placeholder.png");
+    if (Model.Image!= null)
+    {
+        plyrImg = Model.Image;
+    }
+}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header bg-primary display-5 text-light fs-10">
+            Details
+        </div>
+        <div class="card-body">
+            <form>
+
+                <div class="mx-auto">
+                    <img src="@plyrImg"
+                         id="ImagePrev"
+                         class="rounded-circle mx-auto d-block"
+                         alt="UploadImage"
+                         style="width:200px;height:200px;object-fit:cover;" />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label">Name</label>
+                    <input type="text" class="form-control-plaintext" asp-for="Name" placeholder="Name">
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input type="email" class="form-control-plaintext" asp-for="Email" placeholder="name@example.com">
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Age" class="form-label">Age</label>
+                    <input type="text" class="form-control-plaintext" asp-for="Age" placeholder="Age" readonly>
+                    <span asp-validation-for="Age" class="text-danger small"></span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+    </script>
+}

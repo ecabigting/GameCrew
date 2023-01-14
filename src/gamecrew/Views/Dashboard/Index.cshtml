@@ -1,0 +1,209 @@
+@using gamecrew.Models
+@using gamecrew.Helpers
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor _httpCtxtAc;
+@{
+    ViewData["Title"] = "Dashboard";
+    ISession session = _httpCtxtAc.HttpContext.Session;
+    var PContext = session.GetObjectFromJson<PlayerContext>("playerContext");
+}
+@model DashboardViewModel
+<div class="container-fluid">
+    @if (Model.Memberships != null || Model.PlayerGroupsAsAdmin != null)
+    {
+        <div class="card">
+            <div class="card-header bg-primary text-light">
+                <span>Groups you are an admin</span>
+                <a asp-controller="Groups" asp-action="Create" class="btn btn-secondary float-right">Create a group</a>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="tblYourGroupsAsAdmin">
+                    <thead>
+                        <tr>
+                            <td class="text-center"></td>
+                            <td>Name</td>
+                            <td>Action</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.PlayerGroupsAsAdmin != null && Model.PlayerGroupsAsAdmin.Count() > 0)
+                        {
+                            @foreach (PlayerGroups groups in Model.PlayerGroupsAsAdmin)
+                            {
+                                string grpImg = Url.Content("/img/placeholder_groups.png");
+                                if (groups.Image != null)
+                                {
+                                    grpImg = groups.Image;
+                                }
+                                <tr>
+                                    <td class="text-center">
+                                        <img src="@grpImg"
+                                             id="AsAdminGroupImage"
+                                             class="img-thumbnail"
+                                             alt="Group Image"
+                                             style="width:100px;height:100px;object-fit:cover;" />
+                                    </td>
+                                    <td>
+                                        <a asp-controller="Groups" asp-action="GroupDetails" asp-route-groupId="@groups.Id">@groups.Name</a>
+                                    </td>
+                                    <td>
+                                        <a asp-controller="Groups" asp-action="GroupDetails" asp-route-groupId="@groups.Id" class="btn btn-primary">View</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3">
+                                    <a asp-controller="Groups" asp-action="Create" class="btn btn-primary">Create a group</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <hr />
+        <div class="card">
+            <div class="card-header bg-primary text-light">
+                <span>Invites</span>
+            </div>
+            <div class="card-body">
+                <label class="text-info">@TempData["Message"]</label>
+                <table class="table table-striped table-bordered" id="tblYourGroupsAsAdmin">
+                    <thead>
+                        <tr>
+                            <td class="text-center"></td>
+                            <td>Invite</td>
+                            <td>Invite Date</td>
+                            <td>Action</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Invites != null && Model.Invites.Count() > 0)
+                        {
+                            @foreach (GroupInvitesOfPlayer groups in Model.Invites)
+                            {
+                                string grpImg = Url.Content("/img/placeholder_groups.png");
+                                if (groups.GroupImage != null)
+                                {
+                                    grpImg = groups.GroupImage;
+                                }
+                                <tr>
+                                    <td class="text-center">
+                                        <img src="@grpImg"
+                                             id="grpInvite"
+                                             class="img-thumbnail"
+                                             alt="Group Image"
+                                             style="width:100px;height:100px;object-fit:cover;" />
+                                    </td>
+                                    <td>
+                                        <strong>@groups.InviterName</strong> invited you to the group 
+                                        <a asp-controller="Groups" asp-action="GroupView" asp-route-groupId="@groups.GroupId">@groups.GroupName</a>
+                                    </td>
+                                    <td>
+                                        @groups.InvitedDate.ToShortDateString()
+                                    </td>
+                                    <td>
+                                        <a asp-controller="Groups" asp-action="AcceptInvite" asp-route-inviteId="@groups.InviteId" class="btn btn-primary">Accept</a>
+                                        <a asp-controller="Groups" asp-action="DeclineInvite" asp-route-inviteId="@groups.InviteId" class="btn btn-primary">Decline</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4">
+                                    <p>No pending invites!</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <hr />
+        <div class="card">
+            <div class="card-header bg-primary text-light">
+                Groups you are member
+                <a asp-controller="Groups" asp-action="Find" class="btn btn-secondary float-right">Find a group</a>
+            </div>
+            <div class="card-body">
+                <label class="text-info ">@TempData["GroupAsAMember"]</label>
+                <table class="table table-striped table-bordered" id="tblYourGroupsAsAdmin">
+                    <thead>
+                        <tr>
+                            <td class="text-center"></td>
+                            <td>Name</td>
+                            <td>Current Number of member</td>
+                            <td>Action</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Memberships != null && Model.Memberships.Count() > 0)
+                        {
+                            @foreach (PlayerMemberships memberships in Model.Memberships)
+                            {
+                                string grpImg = Url.Content("/img/placeholder_groups.png");
+                                if (memberships.GroupImage != null)
+                                {
+                                    grpImg = memberships.GroupImage;
+                                }
+                                <tr>
+                                    <td class="text-center">
+                                        <img src="@grpImg"
+                                             id="MainProfilePic"
+                                             class="img-thumbnail"
+                                             alt="UploadImage"
+                                             style="width:100px;height:100px;object-fit:cover;" />
+                                    </td>
+                                    <td>
+                                        <a asp-controller="Groups" asp-action="GroupView" asp-route-groupId="@memberships.GroupID">@memberships.GroupName</a>
+                                    </td>
+                                    <td>
+                                        @memberships.CurrentGroupMemberCount
+                                    </td>
+                                    <td>
+                                        <a asp-controller="Groups" asp-action="GroupView" asp-route-groupId="@memberships.GroupID" class="btn btn-primary">View Group</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4">
+                                    <a asp-controller="Groups" asp-action="Find" class="btn btn-primary">Find a group</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-header">
+                Groups
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Welcome!</h5>
+                <p class="card-text"> Try creating a group or one one!</p>
+                <a asp-controller="Groups" asp-action="Create" class="btn btn-primary">Create a group</a>
+                <a asp-controller="Groups" asp-action="Find" class="btn btn-primary">Find a group</a>
+            </div>
+        </div>
+    }
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#tblYourGroupsAsAdmin").dataTable();
+        });
+    </script>
+}

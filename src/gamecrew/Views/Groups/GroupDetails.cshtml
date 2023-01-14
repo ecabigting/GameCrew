@@ -1,0 +1,170 @@
+﻿@using gamecrew.Models
+@model GroupsAdminViewModel
+@{
+    ViewData["Title"] = "Register";
+    string groupImage = "";
+    if (Model.GroupDetails.Image == null)
+    {
+        groupImage = Url.Content("/img/placeholder_groups.png");
+    }
+    else 
+    {
+        groupImage = Model.GroupDetails.Image;
+    }
+}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header bg-primary display-5 text-light fs-10">
+            @Model.GroupDetails.Name
+            
+        </div>
+        <div class="card-body">
+            <form method="post" asp-controller="Groups" asp-action="Update">
+                <div class="mx-auto">
+                    <img src="@groupImage"
+                         id="ImagePrev"
+                         class="rounded-circle mx-auto d-block"
+                         alt="Group Image"
+                         style="width:200px;height:200px;object-fit:cover;" />
+                    @*<div style="margin:auto; display:block; width:200px; text-align:center; padding-top:10px">
+                        <label class="btn btn-primary mx-auto form-label">
+                            Upload Group Image<input type="file" style="display: none;" name="ImageToUpload" id="ImageToUpload" onchange="encodeImgtoBase64(this)">
+                        </label><br />
+                        <p><small>Resolution: 200 x 200 <br />Max Size: 100kB</small></p>
+                    </div>*@
+                    <input type="text" style="display:none;" asp-for="@Model.GroupDetails.Image" />
+                    <input type="hidden" asp-for="@Model.GroupDetails.Id" />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="@Model.GroupDetails.Name" class="form-label">Name</label>
+                    <input type="text" class="form-control-plaintext" asp-for="@Model.GroupDetails.Name" placeholder="Name">
+                    <span asp-validation-for="@Model.GroupDetails.Name" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="@Model.GroupDetails.Description" class="form-label">Name</label>
+                    <textarea rows="3" class="form-control-plaintext" asp-for="@Model.GroupDetails.Description" placeholder="Desription"></textarea>
+                    <span asp-validation-for="@Model.GroupDetails.Description" class="text-danger small"></span>
+                </div>
+                @*<div class="mb-3">
+                    <button type="submit" class="form-control btn btn-secondary">Update</button>
+                </div>*@
+            </form>
+        </div>
+    </div>
+    <hr />
+    <div class="card">
+        <div class="card-header bg-primary display-5 text-light fs-10">
+            Members
+            <a class="btn btn-secondary float-right" asp-controller="Groups" asp-action="InvitePlayersList" asp-route-groupId="@Model.GroupDetails.Id">Invite Players</a>
+        </div>
+        <div class="card-body">
+            <label class="text-info ">@TempData["MemberlistMessage"]</label>
+            @if (Model.Members.Count() > 0)
+            {
+                <table class="table table-striped table-bordered" id="tblGroupsJoinRequest">
+                    <thead>
+                        <tr>
+                            <td class="text-center"></td>
+                            <td>Player Name</td>
+                            <td>Joined Date</td>
+                            <td>Action</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (GroupMembersListViewModel member in Model.Members)
+                        {
+                            string plyrImg = Url.Content("/img/placeholder.png");
+                            if (member.PlayerImage != null) 
+                            {
+                                plyrImg = member.PlayerImage;
+                            }
+                            <tr>
+                                <td>
+                                    <img src="@plyrImg"
+                                         id="ImagePrev"
+                                         class="rounded-circle mx-auto d-block"
+                                         alt="UploadImage"
+                                         style="width:100px;height:100px;object-fit:cover;" />
+                                </td>
+                                <td>@member.PlayerName @if(member.CanBeAdmin == false){<span class="badge badge-success">Admin</span>}</td>
+                                <td>@member.JoiningDate.ToShortDateString()</td>
+                                <td>
+                                    <a asp-controller="Player" asp-action="Index" asp-route-playerId="@member.PlayerId" class="btn btn-secondary text-light">Player Profile</a>
+                                    @if (member.CanBeAdmin == true) 
+                                    {
+                                        <a asp-controller="Groups" asp-action="SetPlayerAsAdmin" asp-route-playerId="@member.PlayerId" asp-route-groupId="@Model.GroupDetails.Id" class="btn btn-danger text-light">Set as Admin</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No Members yet!</p>
+            }
+        </div>
+    </div>
+    <hr />
+    <div class="card">
+        <div class="card-header bg-primary display-5 text-light fs-10">
+            Players Request to join your group
+        </div>
+        <div class="card-body">
+            <label class="text-info ">@TempData["RequestMessage"]</label>
+            @if (Model.Request.Count() > 0)
+            {
+                <table class="table table-striped table-bordered" id="tblGroupsJoinRequest">
+                    <thead>
+                        <tr>
+                            <td class="text-center"></td>
+                            <td>Player Name</td>
+                            <td>Date of request</td>
+                            <td>Action</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (PlayerJoinRequest request in Model.Request)
+                        {
+                            string plyrImg = Url.Content("/img/placeholder.png");
+                            if (request.PlayerDetails.Image != null)
+                            {
+                                plyrImg = request.PlayerDetails.Image;
+                            }
+                            <tr>
+                                <td>
+                                    <img src="@plyrImg"
+                                         id="ImagePrev"
+                                         class="rounded-circle mx-auto d-block"
+                                         alt="UploadImage"
+                                         style="width:100px;height:100px;object-fit:cover;" />
+
+                                </td>
+                                <td>@request.PlayerDetails.Name</td>
+                                <td>@request.CreatedDate.ToShortDateString()</td>
+                                <td>
+                                    <a asp-controller="Groups" asp-action="ApproveRequest" asp-route-grouId="@request.GroupId" asp-route-requestId="@request.Id" class="btn btn-secondary">Approve Request</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No Pending Request!</p>
+            }
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(document).ready(function () {
+                $("#tblGroupsJoinRequest").dataTable();
+            });
+        });
+    </script>
+}

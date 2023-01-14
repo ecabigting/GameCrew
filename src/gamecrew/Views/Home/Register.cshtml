@@ -1,0 +1,63 @@
+﻿@using gamecrew.Models
+@model Player
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container-fluid">
+    <h1 class="display-4 text-center">Welcome</h1>
+    <div class="card">
+        <div class="card-header bg-primary display-5 text-light fs-10">
+            Register
+        </div>
+        <div class="card-body">
+            <form method="post" asp-controller="Home" asp-action="Register">
+                <div class="mx-auto">
+                    <img src="~/img/placeholder.png" 
+                         id="ImagePrev" 
+                         class="rounded-circle mx-auto d-block"
+                         alt="UploadImage" 
+                         style="width:200px;height:200px;object-fit:cover;" />
+                    <div style="margin:auto; display:block; width:200px; text-align:center; padding-top:10px">
+                        <label class="btn btn-primary mx-auto form-label">
+                            Upload Picture<input type="file" style="display: none;" name="ImageToUpload" id="ImageToUpload" onchange="encodeImgtoBase64(this)">
+                        </label><br />
+                        <p><small>Resolution: 200 x 200 <br/>Max Size: 100kB</small></p>
+                    </div>
+                    <input type="text" style="display:none;" asp-for="Image" />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label">Name</label>
+                    <input type="text" class="form-control" asp-for="Name" placeholder="Name">
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input type="email" class="form-control" asp-for="Email" placeholder="name@example.com">
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label">Password</label>
+                    <input type="password" class="form-control" asp-for="Password" placeholder="password">
+                    <span asp-validation-for="Password" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Age" class="form-label">Age</label>
+                    <input type="number" class="form-control" asp-for="Age" placeholder="Age">
+                    <span asp-validation-for="Age" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="form-control btn btn-secondary">Register</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+    </script>
+}
