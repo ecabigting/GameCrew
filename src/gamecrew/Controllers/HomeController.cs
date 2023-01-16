@@ -15,17 +15,20 @@ public class HomeController : Controller
     private readonly IHttpContextAccessor _httpCtxtAcc;
     private ISession _session => _httpCtxtAcc.HttpContext.Session;
     private PlayerContext PlayerCtxt { get; set; }
+    private AppSettings ASettings {get;set;}
     IPlayerService Service { get; }
 
-    public HomeController(IHttpContextAccessor httpContextAccessor, IPlayerService _service)
+    public HomeController(IHttpContextAccessor httpContextAccessor, IPlayerService _service, AppSettings _appS)
     {
         Service = _service;
         _httpCtxtAcc = httpContextAccessor;
         PlayerCtxt = _session.GetObjectFromJson<PlayerContext>("playerContext");
+        ASettings = _appS;
     }
 
     public IActionResult Index()
     {
+        TempData["CKey"] = ASettings.CaptchaKey;
         if (PlayerCtxt != null)
         {
             return RedirectToAction("Index","Dashboard");

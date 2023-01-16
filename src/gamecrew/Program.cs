@@ -22,6 +22,7 @@ AppSettings settings = new AppSettings{
     DatabaseName = builder.Configuration["PlayerGroupsDatabaseSettings:DatabaseName"],
     Key = builder.Configuration["Tokens:Key"],
     Exp = Convert.ToInt32(builder.Configuration["Tokens:Exp"]),
+    CaptchaKey = builder.Configuration["Tokens:CaptchaKey"]
 };
 builder.Services.AddSingleton(settings);
 #endregion AppSettings
