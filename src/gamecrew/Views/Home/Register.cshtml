@@ -11,7 +11,7 @@
             Register
         </div>
         <div class="card-body">
-            <form method="post" asp-controller="Home" asp-action="Register">
+            <form method="post" asp-controller="Home" asp-action="Register" id="registerForm">
                 <div class="mx-auto">
                     <img src="~/img/placeholder.png" 
                          id="ImagePrev" 
@@ -47,6 +47,10 @@
                     <span asp-validation-for="Age" class="text-danger small"></span>
                 </div>
                 <div class="mb-3">
+                    <span id="CaptchaError" class="text-danger" style="display:none;">CAPTCHA cannot be empty.</span>
+                    <div class="g-recaptcha" id="recaptchaDiv" data-sitekey='@TempData["CKey"]' data-theme="dark"></div>
+                </div>
+                <div class="mb-3">
                     <button type="submit" class="form-control btn btn-secondary">Register</button>
                 </div>
 
@@ -55,9 +59,23 @@
     </div>
 </div>
 @section Scripts{
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
     <script type="text/javascript">
-        $(document).ready(function () {
+        var onloadCallback = function() {
+            grecaptcha.render('recaptchaDiv');
+            $('#registerForm').on('submit', function (e) {
+                $captcha = $('#recaptchaDiv');
+                response = grecaptcha.getResponse();
 
-        });
+                if (response.length === 0) {
+                    $('#CaptchaError').show();
+                    return false;
+                    //e.preventDefault();
+                } else {
+                    $('#CaptchaError').hide();
+                    return true;
+                }
+            });
+        };
     </script>
 }

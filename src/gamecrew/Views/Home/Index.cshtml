@@ -23,7 +23,9 @@
                 </div>
                 <div class="mb-3">
                     <span id="CaptchaError" class="text-danger" style="display:none;">CAPTCHA cannot be empty.</span>
-                    <div class="g-recaptcha form-control" id="recaptchaDiv" data-sitekey='@TempData["CKey"]' data-theme="dark"></div>
+                    <div class="g-recaptcha" id="recaptchaDiv" data-sitekey='@TempData["CKey"]' data-theme="dark"></div>
+                </div>
+                <div class="mb-3">
                     <button type="submit" class="form-control btn btn-primary">Login</button>
                 </div>
                 @* <div class="mb-3">
@@ -54,5 +56,4 @@
             });
         };
     </script>
-
 }

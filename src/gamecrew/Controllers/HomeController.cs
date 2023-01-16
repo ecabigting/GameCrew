@@ -83,12 +83,14 @@ public class HomeController : Controller
 
     public IActionResult Register()
     {
+        TempData["CKey"] = ASettings.CaptchaKey;
         return View();
     }
 
     [HttpPost]
     public IActionResult Register(Player _player)
     {
+        TempData["CKey"] = ASettings.CaptchaKey;
         try
         {
             if (ModelState.IsValid)
