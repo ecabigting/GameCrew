@@ -42,6 +42,7 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult Login(PlayerLogin _login) 
     {
+        TempData["CKey"] = ASettings.CaptchaKey;
         try
         {
             if (ModelState.IsValid)
