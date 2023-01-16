@@ -12,7 +12,7 @@
         </div>
         <div class="card-body">
             <label class="text-info ">@TempData["Message"]</label>
-            <form method="post" asp-controller="Home" asp-action="Login">
+            <form method="post" asp-controller="Home" asp-action="Login" id="loginForms">
                 <div class="mb-3">
                     <label asp-for="Email" class="form-label">Email</label>
                     <input type="email" class="form-control" asp-for="Email" placeholder="name@example.com">
@@ -22,12 +22,20 @@
                     <input type="password" class="form-control" asp-for="Password" placeholder="password">
                 </div>
                 <div class="mb-3">
+                    <div class="g-recaptcha" data-sitekey="your_site_key"></div>
                     <button type="submit" class="form-control btn btn-primary">Login</button>
                 </div>
-                <div class="mb-3">
+                @* <div class="mb-3">
                     <a asp-controller="Home" asp-action="Register" class="form-control btn btn-primary">Register</a>
-                </div>
+                </div> *@
             </form>
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+    <script type="text/javascript">
+    </script>
+}
